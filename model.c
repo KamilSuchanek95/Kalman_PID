@@ -33,13 +33,15 @@ void main()
 	FILE * fp;
 	fp = fopen("dane.txt", "w+");
 
+	m->G = PID_c(1);
+
 	/*Symulacja*/
 	if(m->G)//
 	{
 	/*Napięcie jako różnica temperatur*/
 		float U = m->Tw - m->Tz;
 													/*Zwiększenie temperatury o ładunek kondensatora*/
-															m->Tw += m->Cc * U;
+															m->Tw += m->Cc * U ;//Q*(1/dt)
 /*Prąd na zewnątrz - Uciekające ciepło*/
 		Iout = U / m->Rc;
 			/*Zapis do pliku*/
@@ -51,7 +53,6 @@ void main()
 		float U = m->Tw - m->Tz;
 													/*Zmniejszenie temperatury pomieszczenia*/
 															m->Tw -= m->Cc * m->Rc * Ic;
-/*Początkowy prąd dla kondensatora bez zasilania*/
 
 	/*Spadek prądu poprzez rozładowanie kondensatora*/
 		Ic = Ic * exp(1 / (m->Rc * m->Cc));
@@ -61,8 +62,8 @@ void main()
 		fprintf(fp,"%d\n", Iout);
 	}
 
-	/*Rysowanie*/
+
 	fclose(fp);
-	system("gnuplot rysowanie.gp -p");
+	//system("gnuplot rysowanie.gp -p");
 }
 /**/
